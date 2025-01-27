@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
-import Register from '../../Components/Register';
-import Login from '../../Components/Login';
+import Register from '../Components/Register';
+import Login from '../Components/Login';
 
 function Home() {
   // States for Form Switch (Login / Register)
