@@ -1,29 +1,49 @@
-const Button = ({ onClick, children, dynamicStyle }) => {
-    const defaultStyles = {
-      padding: '10px 20px',
-      fontSize: '16px',
-      backgroundColor: '#4CAF50',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      transition: 'background-color 0.3s',
-    };
+import { useState, useEffect } from 'react';
+import './Button.css';
+
+const Button = ({ onClick, children, customcss, buttonType = "primary", disabled }) => {
+  const [uniqueClassName, setUniqueClassName] = useState('');
+
+  useEffect(() => {
+    const uniqueClass = `button-${Math.random().toString(36).substr(2, 9)}`;
+    setUniqueClassName(uniqueClass);
+
+    if (customcss) {
+      generateCustomClass(customcss, uniqueClass);
+    }
+  }, [customcss]);
+
+  const baseClass = "button";
   
-    const buttonStyles = dynamicStyle
-      ? { ...defaultStyles, ...dynamicStyle }
-      : defaultStyles;
+  const buttonClass = `${baseClass} ${baseClass}-${buttonType}`;
   
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        style={buttonStyles}
-      >
-        {children}
-      </button>
-    );
-  };
-  
-  export default Button;
-  
+  const finalClass = disabled ? `${buttonClass} ${baseClass}-disabled` : buttonClass;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`${finalClass} ${uniqueClassName}`}
+    >
+      {children}
+    </button>
+  );
+};
+
+const generateCustomClass = (customcss, className) => {
+  let styleTag = document.getElementById('dynamic-button-styles');
+  if (!styleTag) {
+    styleTag = document.createElement('style');
+    styleTag.id = 'dynamic-button-styles';
+    document.head.appendChild(styleTag);
+  }
+
+  const customClassName = `.${className} {${Object.entries(customcss).map(([key, value]) => {
+    return `${key}: ${value};`;
+  }).join(" ")}}`;
+
+  styleTag.appendChild(document.createTextNode(customClassName));
+};
+
+export default Button;

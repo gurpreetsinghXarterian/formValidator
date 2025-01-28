@@ -1,17 +1,14 @@
-/* Basic reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* H1 and Form Header styles */
   h2 {
     color: #333;
     margin-bottom: 20px;
   }
   
-  /* Input field and button styles */
   input,
   button {
     margin-bottom: 15px;
@@ -32,3 +29,22 @@
     background-color: #45a049;
   }
   
+  .outer-container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #6452ec, #be68c7);
+}
+
+.outer-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.outer-success {
+  color: green;
+}

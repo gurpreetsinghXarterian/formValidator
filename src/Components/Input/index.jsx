@@ -1,32 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import './Input.css';
 
 const Input = ({
   type,
   placeholder,
   value,
   onChange,
-  dynamicStyle,
   validate,
   name,
-  errorMessage
+  errorMessage,
+  customcss,
+  buttonType = "primary",
+  disabled
 }) => {
   const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
-  const defaultStyles = {
-    padding: '10px',
-    fontSize: '16px',
-    margin: '10px 0',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    width: '100%',
-    transition: 'border-color 0.3s, box-shadow 0.3s',
-  };
-
-  const inputStyles = dynamicStyle
-    ? { ...defaultStyles, ...dynamicStyle }
-    : defaultStyles;
+  const inputRef = useRef(null); 
 
   useEffect(() => {
     if (value && validate) {
@@ -57,9 +47,18 @@ const Input = ({
     setIsHovered(false);
   };
 
+  const baseClass = "input";
+
+  const uniqueClassName = `${baseClass}-${Math.random().toString(36).substr(2, 9)}`;
+
+  const inputClass = `${baseClass} ${baseClass}-${buttonType} ${isFocused ? `${baseClass}-focus` : ''} ${isHovered ? `${baseClass}-hover` : ''} ${error ? `${baseClass}-error` : ''} ${disabled ? `${baseClass}-disabled` : ''} ${uniqueClassName}`;
+
+  const customClass = customcss ? generateCustomClass(customcss, uniqueClassName) : '';
+
   return (
-    <div style={styles.inputContainer}>
+    <div className="input-container">
       <input
+        ref={inputRef}
         type={type}
         placeholder={placeholder}
         value={value}
@@ -68,39 +67,29 @@ const Input = ({
         onFocus={handleFocus}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{
-          ...inputStyles,
-          borderColor: error
-            ? '#e74c3c'
-            : isFocused
-              ? '#6452ec'
-              : isHovered
-                ? '#aaa'
-                : '#ccc',
-          boxShadow: error
-            ? '0 0 5px rgba(231, 76, 60, 0.6)'
-            : isFocused
-              ? '0 0 5px rgba(100, 82, 236, 0.6)'
-              : isHovered
-                ? '0 0 5px rgba(100, 82, 236, 0.3)'
-                : 'none',
-        }}
+        className={`${inputClass} ${customClass}`}
+        disabled={disabled}
       />
-      {error && <p style={styles.error}>{error}</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };
 
-const styles = {
-  inputContainer: {
-    width: '100%',
-    margin: '10px 0',
-  },
-  error: {
-    color: '#e74c3c',
-    fontSize: '12px',
-    marginTop: '5px',
-  },
+const generateCustomClass = (customcss, className) => {
+  let styleTag = document.getElementById('dynamic-styles');
+  if (!styleTag) {
+    styleTag = document.createElement('style');
+    styleTag.id = 'dynamic-styles';
+    document.head.appendChild(styleTag);
+  }
+
+  const customClassName = `.${className} {${Object.entries(customcss).map(([key, value]) => {
+    return `${key}: ${value};`;
+  }).join(" ")}}`;
+
+  styleTag.appendChild(document.createTextNode(customClassName));
+
+  return className;
 };
 
 export default Input;
