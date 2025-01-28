@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({
   name,
   errorMessage,
   customcss,
-  buttonType = 'primary',
+  buttonType ,
   disabled = false,
 }) => {
   const [error, setError] = useState<string>(errorMessage || '');
