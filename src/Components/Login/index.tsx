@@ -1,28 +1,37 @@
+import { useState, ChangeEvent, MouseEvent } from 'react';
+import "./login.css";
+import Input from '../Input/index';
+import Button from '../Button/index';
 
-import { useState } from 'react';
-import Button from '../Button';
-import Input from '../Input';
-import "./login.css"
-function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const handleEmailChange = (e) => {
+// Defining types for props
+interface LoginProps {
+  setIsLoggedIn: (status: boolean) => void;
+  setForm: (formState: { login: boolean; register: boolean }) => void;
+  isLoggedIn: boolean;
+  form: { login: boolean; register: boolean };
+}
+
+const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setForm, isLoggedIn, form }) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const validateEmail = (value) => {
+  const validateEmail = (value: string): string => {
     if (!value) return 'Email is required';
     const emailPattern = /\S+@\S+\.\S+/;
     if (!emailPattern.test(value)) return 'Please enter a valid email';
     return '';
   };
 
-  const validatePassword = (value) => {
+  const validatePassword = (value: string): string => {
     if (!value) return 'Password is required';
     if (value.length < 6) return 'Password must be at least 6 characters';
     return '';
@@ -30,7 +39,7 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
 
   const handleLogin = () => {
     if (email !== '' && password !== '') {
-      setError("")
+      setError('');
 
       const emailError = validateEmail(email);
       const passwordError = validatePassword(password);
@@ -40,9 +49,8 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
         return;
       }
 
-
-      const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
-      const storedUser = storedUsers.find((user) => user.email === email && user.password === password);
+      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const storedUser = storedUsers.find((user: { email: string; password: string }) => user.email === email && user.password === password);
 
       if (storedUser) {
         setIsLoggedIn(true);
@@ -50,22 +58,21 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
       } else {
         setError('Invalid email or password');
       }
-    }
-    else {
-      setError("Pls fill all the details first")
+    } else {
+      setError('Please fill all the details first');
     }
   };
 
   return (
-    <div className={"container"}>
+    <div className="container">
       <div style={{ width: "65%", height: "80vh", display: "flex", paddingTop: "150px", alignItems: "center", flexDirection: "column" }}>
-        <h1 style={{ color: "#000a", marginBottom: "15px", textAlign: "center", }}>Welcome to Website</h1>
+        <h1 style={{ color: "#000a", marginBottom: "15px", textAlign: "center" }}>Welcome to Website</h1>
         <p style={{ color: "#0008", height: "100%", textAlign: "center", paddingLeft: "50px", paddingRight: "50px" }}>
           To access your personalized content and features, please log in. If you don’t have an account yet, register now to get started and unlock all the great tools we offer. It’s quick and easy!
         </p>
       </div>
-      <div className={"formContainer"}>
-        <div className={"form"}>
+      <div className="formContainer">
+        <div className="form">
           <h2>{isLoggedIn ? 'Welcome Back!' : form.login ? 'Login' : 'Register'}</h2>
           <Input
             type="email"
@@ -79,7 +86,6 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
               // borderRadius: '10px'
             }}
           />
-
           <Input
             type="password"
             placeholder="Password"
@@ -92,8 +98,7 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
               // borderRadius: '10px'
             }}
           />
-
-          {error && (<p className={"error"}>{error}</p>)}
+          {error && <p className="error">{error}</p>}
           <Button
             onClick={handleLogin}
             // buttonType="secondary"
@@ -107,12 +112,11 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
           >
             Login
           </Button>
-
           <p>
             Don't have an account?{' '}
             <span
-              className={"formChange"}
-              onClick={() => { setForm({ login: false, register: true });  }}
+              className="formChange"
+              onClick={() => { setForm({ login: false, register: true }); }}
             >
               Register
             </span>
@@ -121,8 +125,6 @@ function Login({ setIsLoggedIn, setForm, isLoggedIn, form }) {
       </div>
     </div>
   );
-}
+};
 
 export default Login;
-
-
