@@ -1,5 +1,46 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2017",
+//     "lib": [
+//       "dom",
+//       "dom.iterable",
+//       "esnext"
+//     ],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": false,
+//     "noEmit": true,
+//     "incremental": true,
+//     "module": "esnext",
+//     "esModuleInterop": true,
+//     "moduleResolution": "node",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "preserve",
+//     "plugins": [
+//       {
+//         "name": "next"
+//       }
+//     ]
+//   },
+//   "include": [
+//     "next-env.d.ts",
+//     ".next/types/**/*.ts",
+//     "**/*.ts",
+//     "**/*.tsx"
+//   ],
+//   "exclude": [
+//     "node_modules"
+//   ]
+// }
 {
   "compilerOptions": {
+    "strict": true, // Enables strict mode for better type safety
+    "noImplicitAny": true, // Disallows variables with an implicit 'any' type
+    "jsx": "preserve", // JSX transform for React 17 and later
+    "esModuleInterop": true, // Ensures compatibility with CommonJS and ES Modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,
     "target": "ES2017",
     "lib": [
       "dom",
@@ -7,16 +48,12 @@
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
     "noEmit": true,
     "incremental": true,
     "module": "esnext",
-    "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
     "plugins": [
       {
         "name": "next"
@@ -24,10 +61,10 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
