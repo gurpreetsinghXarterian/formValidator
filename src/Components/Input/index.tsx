@@ -30,7 +30,7 @@ const Input: React.FC<InputProps> = ({
   const [error, setError] = useState<string>(errorMessage || '');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement | null>(null); // Ref to input element
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (value && validate) {
