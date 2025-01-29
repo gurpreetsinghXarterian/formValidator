@@ -1,12 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import Button from '../Button/index';
 import Input from '../Input/index';
 import './register.css';
-
-// Define types for the props
-interface RegisterProps {
-  setForm: React.Dispatch<React.SetStateAction<{ login: boolean; register: boolean }>>;
-}
+import { RegisterProps } from '../../types/types'; 
 
 const Register: React.FC<RegisterProps> = ({ setForm }) => {
   const [registerEmail, setRegisterEmail] = useState<string>('');
@@ -49,12 +45,12 @@ const Register: React.FC<RegisterProps> = ({ setForm }) => {
       const emailError = validateEmail(registerEmail);
       const passwordError = validatePassword(registerPassword);
 
-      if (emailError || passwordError) {
-        setRegisterError(emailError || passwordError);
+      if (emailError ?? passwordError) {
+        setRegisterError(emailError ?? passwordError);
         return;
       }
 
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const storedUsers = JSON.parse(localStorage.getItem('users') ?? '[]');
 
       const userExists = storedUsers.some((user: { email: string }) => user.email === registerEmail);
       if (userExists) {

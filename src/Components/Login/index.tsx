@@ -2,14 +2,7 @@ import { useState, ChangeEvent, MouseEvent } from 'react';
 import "./login.css";
 import Input from '../Input/index';
 import Button from '../Button/index';
-
-// Defining types for props
-interface LoginProps {
-  setIsLoggedIn: (status: boolean) => void;
-  setForm: (formState: { login: boolean; register: boolean }) => void;
-  isLoggedIn: boolean;
-  form: { login: boolean; register: boolean };
-}
+import { LoginProps } from '../../types/types'; 
 
 const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setForm, isLoggedIn, form }) => {
   const [email, setEmail] = useState<string>('');
@@ -44,12 +37,12 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setForm, isLoggedIn, form 
       const emailError = validateEmail(email);
       const passwordError = validatePassword(password);
 
-      if (emailError || passwordError) {
-        setError(emailError || passwordError);
+      if (emailError ?? passwordError) {
+        setError(emailError ?? passwordError);
         return;
       }
 
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const storedUsers = JSON.parse(localStorage.getItem('users') ?? '[]');
       const storedUser = storedUsers.find((user: { email: string; password: string }) => user.email === email && user.password === password);
 
       if (storedUser) {
@@ -81,7 +74,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setForm, isLoggedIn, form 
             onChange={handleEmailChange}
             validate={validateEmail}
             customcss={{
-              // width: '300px',
+              // width: '30px',
               // padding: '15px',
               // borderRadius: '10px'
             }}
@@ -93,7 +86,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setForm, isLoggedIn, form 
             onChange={handlePasswordChange}
             validate={validatePassword}
             customcss={{
-              // width: '300px',
+              // width: '30px',
               // padding: '15px',
               // borderRadius: '10px'
             }}
