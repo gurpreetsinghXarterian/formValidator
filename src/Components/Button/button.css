@@ -45,4 +45,19 @@
     color: #aaa;
     cursor: not-allowed;
   }
+
+  .button-pink {
+    color: white;
+    background-color: pink;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
   
+  .button-blue {
+    color: white;
+    background-color: blue;
+    border: 1px solid #008CBA;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }

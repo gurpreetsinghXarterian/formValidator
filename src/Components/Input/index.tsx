@@ -1,6 +1,5 @@
-import { useState, useRef, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent } from 'react';
 import './Input.css';
-import { generateCustomClass } from '../../utils/genericCustomClass'; // Import from utils
 import { InputProps } from '../../types/types';
 
 const Input: React.FC<InputProps> = ({
@@ -18,19 +17,12 @@ const Input: React.FC<InputProps> = ({
   const [error, setError] = useState<string>(errorMessage ?? '');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const validateInput = (val: string) => {
     if (validate) {
       setError(validate(val));
     }
   };
-
-  useEffect(() => {
-    if (customcss && inputRef.current) {
-      generateCustomClass(customcss, inputRef);
-    }
-  }, [customcss]);
 
   const handleBlur = () => {
     setIsFocused(false);
@@ -58,13 +50,12 @@ const Input: React.FC<InputProps> = ({
   };
 
   const baseClass = 'input';
-  const inputClass = `${baseClass} ${baseClass}-${buttonType} ${isFocused ? `${baseClass}-focus` : ''} ${isHovered ? `${baseClass}-hover` : ''} ${error ? `${baseClass}-error` : ''} ${disabled ? `${baseClass}-disabled` : ''}`;
+  const inputClass = `${baseClass} ${baseClass}-${buttonType} ${isFocused ? `${baseClass}-focus` : ''} ${isHovered ? `${baseClass}-hover` : ''} ${error ? `${baseClass}-error` : ''} ${disabled ? `${baseClass}-disabled` : ''} ${customcss ?? ''}`.trim();
 
 
   return (
     <div className="input-container">
       <input
-        ref={inputRef}
         type={type}
         placeholder={placeholder}
         value={value}

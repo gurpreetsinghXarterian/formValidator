@@ -3,6 +3,7 @@ import Button from '../Button/index';
 import Input from '../Input/index';
 import './register.css';
 import { RegisterProps } from '../../types/types'; 
+import { buttonVarients } from '../Button/varients';
 
 const Register: React.FC<RegisterProps> = ({ setForm }) => {
   const [registerEmail, setRegisterEmail] = useState<string>('');
@@ -117,7 +118,7 @@ const Register: React.FC<RegisterProps> = ({ setForm }) => {
             validate={validatePassword}
           />
           {registerError && <p className={'error'}>{registerError}</p>}
-          <Button onClick={handleRegister}>Register</Button>
+          <Button onClick={handleRegister} customcss={buttonVarients.buttonBlue}>Register</Button>
 
           <p>
             Already have an account?{' '}

@@ -9,7 +9,7 @@ export interface InputProps {
   validate: (value: string) => string;
   name?: string;
   errorMessage?: string;
-  customcss?: React.CSSProperties;
+  customcss?: string;
   buttonType?: 'primary' | 'secondary' | 'danger' | 'focus' | 'hover' | 'error' | 'disabled';
   disabled?: boolean;
 }
@@ -18,7 +18,7 @@ export interface InputProps {
 export interface ButtonProps {
   onClick: () => void;
   children: ReactNode;
-  customcss?: React.CSSProperties;
+  customcss?: string;
   buttonType?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'outline' | 'disabled';
   disabled?: boolean;
 }

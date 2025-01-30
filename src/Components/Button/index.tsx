@@ -1,28 +1,22 @@
-import { useRef, useEffect } from 'react';
 import './Button.css';
-import { generateCustomClass } from '../../utils/genericCustomClass';
 import { ButtonProps } from '../../types/types';
 
 const Button: React.FC<ButtonProps> = ({ onClick, children, customcss, buttonType = 'primary', disabled = false }) => {
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    if (customcss && buttonRef.current) {
-      generateCustomClass(customcss, buttonRef);
-    }
-  }, [customcss]);
-
   const baseClass = 'button';
   const buttonClass = `${baseClass} ${baseClass}-${buttonType}`;
   const finalClass = disabled ? `${buttonClass} ${baseClass}-disabled` : buttonClass;
+  
+  const customClass = customcss ?? '';
+  
+  const dynamicClass = `${finalClass} ${customClass}`.trim();
+  console.log(dynamicClass);
 
   return (
     <button
-      ref={buttonRef}
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`${finalClass}`}
+      className={`${dynamicClass}`}
     >
       {children}
     </button>
