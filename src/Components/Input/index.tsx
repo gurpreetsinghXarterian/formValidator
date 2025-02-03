@@ -1,19 +1,6 @@
-import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import './Input.css';
-
-// Define the types for the component props
-interface InputProps {
-  type: string;
-  placeholder: string;
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  validate: (value: string) => string;
-  name?: string;
-  errorMessage?: string;
-  customcss?: React.CSSProperties;
-  buttonType?: 'primary' | 'secondary' | 'danger' | 'focus' | 'hover' | 'error' | 'disabled';
-  disabled?: boolean;
-}
+import { InputProps } from '../../types/types';
 
 const Input: React.FC<InputProps> = ({
   type,
@@ -24,22 +11,18 @@ const Input: React.FC<InputProps> = ({
   name,
   errorMessage,
   customcss,
-  buttonType ,
+  buttonType,
   disabled = false,
 }) => {
-  const [error, setError] = useState<string>(errorMessage || '');
+  const [error, setError] = useState<string>(errorMessage ?? '');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (value && validate) {
-      const validationError = validate(value);
-      setError(validationError);
-    } else {
-      setError('');
+  const validateInput = (val: string) => {
+    if (validate) {
+      setError(validate(val));
     }
-  }, [value, validate]);
+  };
 
   const handleBlur = () => {
     setIsFocused(false);
@@ -61,53 +44,33 @@ const Input: React.FC<InputProps> = ({
     setIsHovered(false);
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e);
+    validateInput(e.target.value);
+  };
+
   const baseClass = 'input';
+  const inputClass = `${baseClass} ${baseClass}-${buttonType} ${isFocused ? `${baseClass}-focus` : ''} ${isHovered ? `${baseClass}-hover` : ''} ${error ? `${baseClass}-error` : ''} ${disabled ? `${baseClass}-disabled` : ''} ${customcss ?? ''}`.trim();
 
-  // Stable class name (no randomization)
-  const inputClass = `${baseClass} ${baseClass}-${buttonType} ${isFocused ? `${baseClass}-focus` : ''} ${isHovered ? `${baseClass}-hover` : ''} ${error ? `${baseClass}-error` : ''} ${disabled ? `${baseClass}-disabled` : ''}`;
-
-  const customClass = customcss ? generateCustomClass(customcss) : '';
 
   return (
     <div className="input-container">
       <input
-        ref={inputRef}
         type={type}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         onBlur={handleBlur}
         onFocus={handleFocus}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`${inputClass} ${customClass}`}
+        className={`${inputClass}`}
         disabled={disabled}
-        name={name} // Ensure 'name' is passed to the input element
+        name={name}
       />
       {error && <p className="error-message">{error}</p>}
     </div>
   );
-};
-
-// Helper function to dynamically inject CSS styles for custom styling
-const generateCustomClass = (customcss: React.CSSProperties): string => {
-  // Ensure this code runs only on the client-side (in the browser)
-  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-    let styleTag = document.getElementById('dynamic-styles');
-    if (!styleTag) {
-      styleTag = document.createElement('style');
-      styleTag.id = 'dynamic-styles';
-      document.head.appendChild(styleTag);
-    }
-
-    const customClassName = `.${styleTag.id} {${Object.entries(customcss).map(([key, value]) => {
-      return `${key}: ${value};`;
-    }).join(' ')}}`;
-
-    styleTag.appendChild(document.createTextNode(customClassName));
-  }
-
-  return '';
 };
 
 export default Input;

@@ -1,9 +1,6 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import "./global.css";
-
-interface RootLayoutProps {
-  children: ReactNode;
-}
+import { RootLayoutProps } from '../types/types'; 
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (

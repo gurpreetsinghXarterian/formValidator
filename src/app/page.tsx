@@ -3,11 +3,8 @@ import { useState } from 'react';
 import Register from '../Components/Register';
 import Login from '../Components/Login';
 import "./global.css";
+import { FormState } from '../types/types'; 
 
-interface FormState {
-  login: boolean;
-  register: boolean;
-}
 const Home: React.FC = () => {
   const [form, setForm] = useState<FormState>({ login: true, register: false });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
